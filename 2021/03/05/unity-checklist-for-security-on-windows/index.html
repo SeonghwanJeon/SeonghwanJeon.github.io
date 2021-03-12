@@ -219,12 +219,12 @@
 <p>이렇게 윈도우가 기초적으로 제공하는 기능들을 이용해 장치한 함정들은 숙련된 공격자들에 의해 쉽게 파훼될 수 있습니다. 경험 많은 해커의 수는 많지 않지만 여러 치트 커뮤니티를 통해 정보가 공유되곤 합니다. 위 2가지에 안주 할 수 없습니다. 스텔스 인젝션 기능이 있는 인젝터나, 매뉴얼 매핑을 지원하는 인젝터들도 다수 있습니다. 각 방식을 감지하고 확인하기위해 끊임없이 다양한 방법을 시도해야합니다.</p>
 <h3 id="4️⃣-il2cpp-빌드"><a href="#4️⃣-il2cpp-빌드" class="headerlink" title="4️⃣ il2cpp 빌드"></a>4️⃣ il2cpp 빌드</h3><p>안드로이드와 iOS에서 AOT 컴파일만 허용하면서 대응을 위해 il2cpp 빌드가 주류로 자리잡았습니다. PC 플랫폼에서는 따로 배포처에서 강제하는 옵션이 없기때문에 <code>mono</code>로 배포를 해도 반려되거나하는 일은 없습니다. 그러나 PC에서도 성능향상측면에서 il2cpp를 이용해야한다는 정보글도 심심찮게 찾아볼 수 있습니다.</p>
 <p>il2cpp는 유니티 빌드 파이프라인 중 하나로, 이름 그대로 직관적인 작업을 수행합니다. IL to CPP, IL 코드를 CPP 코드로 변환해 컴파일해줍니다. IL 코드는 C# 코드로 다시 복원하기 용이하고, 읽기도 쉬운편입니다. 반면 CPP 코드는 오브젝트로 컴파일되고나면 디스어셈블리 도구를 통해 확인해야하고 사람이 읽고 이해하기에도 난해합니다. 뚜렷한 이유 없이 모노 빌드를 사용하고있다면 il2cpp 빌드로 파이프라인을 변경해보세요.</p>
-<h4 id="단점"><a href="#단점" class="headerlink" title="단점"></a>단점</h4><p>모노 빌드 이후 추가로 <code>IL</code> → <code>CPP</code> 과정을 거치기 때문에 빌드 시간은 더 오래 걸립니다. 개발 단계에서 따로 빌드 머신 없이 자주 빌드해야 하는 상황이라면 비효율적일 수 있습니다. 빠른 개발 사이클을 위해 이를 극복하기 위해서는 <code>Jenkins</code>와 같은 도구로, VSC 커밋이 들어오면 해당 해쉬를 버전삼아 자동으로 빌드 수행할 빌드 머신을 세팅하는 것입니다. 여유 시스템 자원이 없다면, 개발 단계에서는 <code>Mono</code>로 <code>Standalone</code> 빌드를 뽑고, 하루에 한 번 정도 <code>il2cpp</code>로 빌드해 <code>Mono</code>와 마찬가지로 동작하는지 확인하는 단계를 넣을 수 있습니다.</p>
+<h4 id="단점"><a href="#단점" class="headerlink" title="단점"></a>단점</h4><p>모노 빌드 이후 추가로 <code>IL</code> → <code>CPP</code> 과정을 거치기 때문에 빌드 시간은 더 오래 걸립니다. 개발 단계에서 따로 빌드 머신 없이 자주 빌드해야 하는 상황이라면 비효율적일 수 있습니다. 빠른 개발 사이클을 위해 이를 극복하기 위해서는 <code>Jenkins</code>와 같은 도구로, VCS 커밋이 들어오면 해당 해쉬를 버전삼아 자동으로 빌드 수행할 빌드 머신을 세팅하는 것입니다. 여유 시스템 자원이 없다면, 개발 단계에서는 <code>Mono</code>로 <code>Standalone</code> 빌드를 뽑고, 하루에 한 번 정도 <code>il2cpp</code>로 빌드해 <code>Mono</code>와 마찬가지로 동작하는지 확인하는 단계를 넣을 수 있습니다.</p>
 <p>리플렉션의 일부 기능을 사용하지 못할 수도 있습니다. 크게는 <code>System.Reflection.Emit</code> 네임스페이스에 정의된 기능을 사용할 수 없습니다. 나머지 리플렉션 기능에 대해서는 AOT 컴파일러가 타입을 추측할 수 있는 경우에만 사용가능합니다. 리플렉션 기능을 적극 활용하여 코어로직을 작성했다면 단번에 <code>il2cpp</code> 빌드로의 전환이 쉽지 않을 수 있습니다. <a target="_blank" rel="noopener" href="https://docs.unity3d.com/Manual/ScriptingRestrictions.html">Unity - Manual: Scripting restrictions (unity3d.com)</a></p>
 <h4 id="사용"><a href="#사용" class="headerlink" title="사용"></a>사용</h4><p>유니티 허브를 통해 설치합니다. il2cpp 빌드를 위한 모듈은 각 에디터 버전에 종속됩니다. 에디터 설치 과정에서 <code>il2cpp</code> 모듈을 추가하셔도 되고, 설치 후 <code>Add Modules</code> 기능을 통해 후에 추가하셔도 무방합니다.</p>
 <p><img src="https://i.imgur.com/03R2crB.png"></p>
 <p>프로젝트 설정의 <code>Player</code> 탭에서 스크립팅 백엔드를 선택할 수 있습니다. <code>il2cpp</code> 모듈이 설치되지 않더라도 <code>il2cpp</code> 선택 아이템을 선택할 수 있으나 빌드를 시도하면 모듈이 설치되지 않았다는 팝업을 띄웁니다. </p>
-<p><img src="https://i.imgur.com/oj6kthd.png"></p>
+<p><img src="https://i.imgur.com/atPRPAE.png"></p>
 <p>빌드를 진행하면, <code>mono</code> 와 유사한 방식으로 빌드를 진행합니다. 리소스를 인덱싱해 묶고, IL 코드를 생성합니다. 여기에서 추가로 IL 코드를 CPP 코드로 바꾸는 과정을 거치며 사용되지 않아 필요없는 코드를 삭제하는 Stripping 단계도 거치게됩니다. 이렇게 <code>GameAssembly.dll</code>은 매번 생성되지만, 다른 <code>exe</code>와 <code>dll</code> 모듈들은 어떻게 생성되는 걸까요?</p>
 <p><img src="https://i.imgur.com/50cCqho.png"></p>
 <p><code>il2cpp</code> 모듈이 설치된 경로를 확인하면, 미리 생성된 <code>&#123;&#123;ProductName&#125;&#125;.exe</code>,  <code>GameAssembly.dll</code>, <code>UnityPlayer.dll</code> 등이 존재합니다. 이 파일들이 <code>output</code> 경로로 복사되면서 빌드 과정이 마무리됩니다.</p>
@@ -331,7 +331,7 @@
     
 
     
-    <p>최근 수정 2021-03-11</p>
+    <p>최근 수정 2021-03-12</p>
     
     
         <a class="extend next post-next" href="/2021/03/01/begining-of-the-blog/">다음 글</a>
